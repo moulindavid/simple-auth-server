@@ -8,8 +8,11 @@ use diesel::r2d2::{self, ConnectionManager};
 
 mod models;
 mod schema;
+mod errors;
+mod invitation_handler;
+mod utils;
 
-#[actix_rt::main]
+#[actix_web::main]
 async fn main() -> std::io::Result<()> {
     dotenv::dotenv().ok();
     std::env::set_var(
@@ -48,7 +51,7 @@ async fn main() -> std::io::Result<()> {
                     .service(
                         web::resource("/invitation")
                             .route(web::post().to(invitation_handler::post_invitation)),
-                    )
+                    ),
                     // .service(
                     //     web::resource("/register/{invitation_id}")
                     //         .route(web::post().to(register_handler::register_user)),
@@ -61,7 +64,7 @@ async fn main() -> std::io::Result<()> {
                     // ),
             )
     })
-    .bind("127.0.0.1:8080")?
+    .bind("127.0.0.1:9090")?
     .run()
     .await
 }
